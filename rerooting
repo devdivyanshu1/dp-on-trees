@@ -1,0 +1,30 @@
+void sum(int node, int parent, vector<int>& dp, vector<int>& sub, vector<vector<int>>& adj) {
+    sub[node] = 1;
+    dp[node] = 0;
+    for (auto it : adj[node]) {
+        if (it != parent) {
+            sum(it, node, dp, sub, adj);
+            dp[node] += dp[it] + sub[it];
+            sub[node] += sub[it];
+        }
+    }
+}
+
+void reroot(int u, int v, vector<int>& dp, vector<int>& sub) {
+    dp[v] -= dp[u] + sub[u];
+    sub[v] -= sub[u];
+
+    dp[u] += dp[v] + sub[v];
+    sub[u] += sub[v];
+}
+
+void oppur(int node, int parent, vector<vector<int>>& adj, vector<int>& answer, vector<int>& dp, vector<int>& sub) {
+    answer[node] = dp[node];
+    for (auto it : adj[node]) {
+        if (it != parent) {
+            reroot(it, node, dp, sub);
+            oppur(it, node, adj, answer, dp, sub);
+            reroot(node, it, dp, sub);  // Restore the original state
+        }
+    }
+}
