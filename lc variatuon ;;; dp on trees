@@ -18,7 +18,9 @@ public:
         for (auto it : adj[node]) {
             if (it != parent) {
                 dp[it] = dp[node] - count[it] + n-count[it];
-                dfs2(it, node, adj, dp, n);
+               // dp[node]-(dp[it]+count[it]) yeh hai khali dp[node];
+               // dp[it]=+n-count[it]+dp[node]-count[it]
+                dfs2(it, node, adj, dp, n); 
             }
         }
     }
