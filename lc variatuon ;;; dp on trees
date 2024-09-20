@@ -1,13 +1,18 @@
 class Solution {
 public:
-    vector<int> count, dp;
+    vector<int> count;
+    vector<int>dp;
 
     void dfs1(int node, int parent, vector<vector<int>>& adj) {
-        count[node] = 1;
-        dp[node] = 0;
+        
         for (auto it : adj[node]) {
             if (it != parent) {
                 dfs1(it, node, adj);
+                
+            }
+        }
+        for (auto it : adj[node]) {
+            if (it != parent) {
                 count[node] += count[it];
                 dp[node] += dp[it] + count[it];
             }
@@ -17,17 +22,15 @@ public:
     void dfs2(int node, int parent, vector<vector<int>>& adj, vector<int>& dp, int n) {
         for (auto it : adj[node]) {
             if (it != parent) {
-                dp[it] = dp[node] - count[it] + n-count[it];
-               // dp[node]-(dp[it]+count[it]) yeh hai khali dp[node];
-               // dp[it]=+n-count[it]+dp[node]-count[it]
-                dfs2(it, node, adj, dp, n); 
+                dp[it] = dp[node] - count[it] + (n - count[it]);
+                dfs2(it, node, adj, dp, n);
             }
         }
     }
 
     vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
         vector<vector<int>> adj(n);
-        count.resize(n, 0);
+        count.resize(n, 1);
         dp.resize(n, 0);
         
       
